@@ -1,0 +1,105 @@
+"use client";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import { ToggleButton } from "../ToggleButton";
+import { CiMenuFries } from "react-icons/ci";
+import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
+import { usePathname } from "next/navigation";
+
+const linkList = [
+  {
+    name: "Home",
+    href: "/",
+  },
+  {
+    name: "Projects",
+    href: "/projects",
+  },
+  {
+    name: "Blogs",
+    href: "/blog",
+  },
+  {
+    name: "Contact",
+    href: "/contact",
+  },
+  {
+    name: "Dashboard",
+    href: "/dashboard",
+  }
+];
+export default function Navbar() {
+  const isScrollingDown = useScrollDirection();
+  const pathname = usePathname();
+
+  const isActive = (path: string) => {
+    return pathname === path;
+  };
+  return (
+    <header
+      className={`sticky top-0 z-50 w-full border-b bg-zinc-50 dark:bg-zinc-900 transition-transform duration-300 ${
+        isScrollingDown ? "-translate-y-full" : "translate-y-0"
+      }`}
+    >
+      <div className="w-[90%] mx-auto flex h-16 justify-between">
+        <Link href="/" className="flex items-center gap-2" prefetch={false}>
+          <span className="text-lg font-bold">Ayan Kumar</span>
+        </Link>
+        <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
+       {linkList.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className={`${
+                isActive(link.href)
+                  ? "text-primary-500 dark:text-primary-500"
+                  : "text-gray-500 dark:text-gray-400"
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </nav>
+        <div className="flex items-center gap-4">
+          <Button>Login</Button>
+          <ToggleButton />
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full md:hidden"
+              >
+                <CiMenuFries className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                <span className="sr-only">Toggle navigation menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="md:hidden">
+              <DialogTitle className="sr-only">Navigation Menu</DialogTitle>
+              <DialogDescription className="sr-only">
+                This menu provides navigation links to different sections.
+              </DialogDescription>
+              <div className="grid gap-4 p-4">
+                {linkList.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className={`${
+                      isActive(link.href)
+                        ? "text-primary-500 dark:text-primary-500"
+                        : "text-gray-500 dark:text-gray-400"
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </header>
+  );
+}
