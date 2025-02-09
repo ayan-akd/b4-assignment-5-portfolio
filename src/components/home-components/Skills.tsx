@@ -19,8 +19,11 @@ import mysql from "@/assets/icons/mysql.png";
 import next from "@/assets/icons/next.svg";
 import lott from "@/assets/lottie.json";
 import Image from "next/image";
-import Lottie from "lottie-react";
-import { motion } from "framer-motion";
+import dynamic from 'next/dynamic'
+
+const Lottie = dynamic(() => import('lottie-react'), {
+  ssr: false // This will disable server-side rendering for Lottie
+});import { motion } from "framer-motion";
 const skills = [
   {
     category: "Frontend",

@@ -7,15 +7,6 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import Image from "next/image";
 export default function Intro() {
-  const handleDownloadClick = () => {
-    const dummyAnchor = document.createElement("a");
-    dummyAnchor.download = "Ayan_Kumar_Das_Resume.pdf";
-    dummyAnchor.href =
-      "https://drive.usercontent.google.com/download?id=1bS_XY8-sQIApl6hg1LVmMSatbI4OcNaM";
-    document.body.appendChild(dummyAnchor);
-    dummyAnchor.click();
-    document.body.removeChild(dummyAnchor);
-  };
   return (
     <div className="max-w-[2520px] mx-auto  mt-12 md:mt-20">
       <div className="grid grid-cols-1 md:grid-cols-2 items-center justify-center gap-20 ">
@@ -42,10 +33,16 @@ export default function Intro() {
               animate={{ opacity: 1, scale: 1, x: 0 }}
               transition={{ duration: 0.75, delay: 0.5 }}
             >
-              <Button className="button-hover" color="danger" onClick={handleDownloadClick}>
-                <MdOutlineFileDownload />
-                Download Resume
-              </Button>
+              <a
+                href="https://drive.usercontent.google.com/download?id=1bS_XY8-sQIApl6hg1LVmMSatbI4OcNaM"
+                download="Ayan_Kumar_Das_Resume.pdf"
+                className="button-hover"
+              >
+                <Button color="danger">
+                  <MdOutlineFileDownload />
+                  Download Resume
+                </Button>
+              </a>
             </m.div>
             <m.div
               initial={{ opacity: 0, scale: 0, x: -500 }}
@@ -75,14 +72,14 @@ export default function Intro() {
         </div>
         <div className="md:order-2 order-1" style={{ perspective: 2000 }}>
           <m.div
-           animate={{ 
-            y: [0, -20, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
+            animate={{
+              y: [0, -20, 0],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
             className="flex items-center justify-center drop-shadow-glow"
           >
             <Image
