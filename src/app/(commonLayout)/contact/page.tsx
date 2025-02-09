@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import photo from "@/assets/Images/image_75.png";
+import photo from "@/assets/Images/profile.png";
 import { FaFacebook, FaInstagram, FaLinkedin, FaGithub } from "react-icons/fa";
 import {
   MdEmail,
