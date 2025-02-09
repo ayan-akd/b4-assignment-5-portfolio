@@ -5,11 +5,23 @@ import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
-import { PanelsTopLeft } from "lucide-react";
+import { useTheme } from "next-themes";
+import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import darkFavIcon from "@/assets/favDark.ico";
+import lightFavIcon from "@/assets/favLight.ico";
 
 export function Sidebar() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const sidebar = useStore(useSidebar, (x) => x);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
   if (!sidebar) return null;
   const { isOpen, toggleOpen, getOpenState, setIsHover, settings } = sidebar;
   return (
@@ -24,7 +36,7 @@ export function Sidebar() {
       <div
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
-        className="relative h-full flex flex-col px-3 py-4 overflow-y-auto shadow-md dark:shadow-zinc-800"
+        className="relative h-full flex flex-col px-3 py-3 overflow-y-auto shadow-md dark:shadow-zinc-800"
       >
         <Button
           className={cn(
@@ -34,8 +46,14 @@ export function Sidebar() {
           variant="link"
           asChild
         >
-          <Link href="/" className="flex items-center gap-2">
-            <PanelsTopLeft className="w-6 h-6 mr-1" />
+          <Link href="/" className="flex items-center justify-center gap-4">
+          <Image
+            src={resolvedTheme === "dark" ? darkFavIcon : lightFavIcon}
+            alt="dark favicon"
+            width={32}
+            height={32}
+            className="h-8 w-8"
+          />
             <h1
               className={cn(
                 "font-bold text-lg whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300",

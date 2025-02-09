@@ -7,6 +7,11 @@ import { CiMenuFries } from "react-icons/ci";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { usePathname } from "next/navigation";
+import darkFavIcon from "@/assets/favDark.ico";
+import lightFavIcon from "@/assets/favLight.ico";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const linkList = [
   {
@@ -28,11 +33,19 @@ const linkList = [
   {
     name: "Dashboard",
     href: "/dashboard",
-  }
+  },
 ];
 export default function Navbar() {
   const isScrollingDown = useScrollDirection();
   const pathname = usePathname();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   const isActive = (path: string) => {
     return pathname === path;
@@ -44,26 +57,39 @@ export default function Navbar() {
       }`}
     >
       <div className="w-[90%] mx-auto flex h-16 justify-between">
-        <Link href="/" className="flex items-center gap-2" prefetch={false}>
-          <span className="text-lg font-bold">Ayan Kumar</span>
+        <Link
+          href="/"
+          className="flex items-center justify-center gap-4"
+          prefetch={false}
+        >
+          <Image
+            src={resolvedTheme === "dark" ? darkFavIcon : lightFavIcon}
+            alt="dark favicon"
+            width={32}
+            height={32}
+            className="h-8 w-8"
+          />
+
+          <h1 className="text-xl font-bold">Ayan Kumar</h1>
         </Link>
-        <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-       {linkList.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className={`${
-                isActive(link.href)
-                  ? "text-primary-500 dark:text-primary-500"
-                  : "text-gray-500 dark:text-gray-400"
-              }`}
-            >
-              {link.name}
-            </Link>
+        <nav className="hidden items-center gap-2 text-sm font-medium md:flex">
+          {linkList.map((link) => (
+            <Button key={link.name} variant="link" effect={isActive(link.href) ? "underline" : "hoverUnderline"} className="md:p-1 lg:p-4">
+              <Link
+                href={link.href}
+                className={`${
+                  isActive(link.href)
+                    ? "text-primary"
+                    : "text-gray-500 dark:text-gray-400"
+                }`}
+              >
+                {link.name}
+              </Link>
+            </Button>
           ))}
         </nav>
         <div className="flex items-center gap-4">
-          <Button>Login</Button>
+          <Button effect="shine">Login</Button>
           <ToggleButton />
           <Sheet>
             <SheetTrigger asChild>
