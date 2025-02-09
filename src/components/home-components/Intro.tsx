@@ -1,5 +1,5 @@
 "use client";
-import profilePic from "@/assets/Images/profile-pic.png";
+import profilePic from "@/assets/Images/profile-pic.jpg";
 import { motion as m } from "framer-motion";
 import { MdOutlineFileDownload, MdContactPhone } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa";
