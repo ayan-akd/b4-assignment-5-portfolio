@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 "use client";
 import { toast } from "sonner";
 import { useForm, useFieldArray } from "react-hook-form";
