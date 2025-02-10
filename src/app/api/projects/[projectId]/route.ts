@@ -1,18 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import dbConnect from "@/lib/database";
 import { ProjectModel } from "@/schemas/project.schema";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // GET a single project by ID
-export async function GET(
-  req: Request,
-  { params }: { params: { projectId: string } }
-) {
+export async function GET(req: NextRequest, context: any) {
   try {
     await dbConnect();
 
-    const { projectId } = await params;
+    const { projectId } = await context.params;
 
     if (!projectId) {
       return NextResponse.json({
@@ -43,13 +41,10 @@ export async function GET(
 }
 
 // PUT to update a project by ID
-export async function PATCH(
-  request: Request,
-  { params }: { params: { projectId: string } }
-) {
+export async function PATCH(request: NextRequest, context: any) {
   try {
     await dbConnect();
-    const { projectId } = params;
+    const { projectId } = await context.params;
     const data = await request.json();
 
     const updatedProject = await ProjectModel.findByIdAndUpdate(
@@ -79,13 +74,10 @@ export async function PATCH(
 }
 
 // DELETE a project by ID
-export async function DELETE(
-  req: Request,
-  { params }: { params: { projectId: string } }
-) {
+export async function DELETE(req: NextRequest, context: any) {
   try {
     await dbConnect();
-    const { projectId } = await params;
+    const { projectId } = await context.params;
 
     await ProjectModel.findByIdAndDelete(projectId);
     return NextResponse.json({

@@ -2,7 +2,7 @@
 
 import dbConnect from "@/lib/database";
 import { MessageModel } from "@/schemas/message.schema";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   try {
@@ -22,7 +22,7 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     await dbConnect();
     const data = await request.json();

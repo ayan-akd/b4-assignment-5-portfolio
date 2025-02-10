@@ -28,7 +28,10 @@ const formSchema = z.object({
     description: z.string().min(1, "Description is required"),
   });
 
-export default function CreateProjectForm() {
+  type CreateProjectFormProps = {
+    onSuccess?: () => void;
+  };
+export default function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -64,6 +67,7 @@ export default function CreateProjectForm() {
             if (response.ok) {
               toast.success("Project created successfully!");
               form.reset();
+              onSuccess?.();
             } else {
               throw new Error('Failed to create project');
             }

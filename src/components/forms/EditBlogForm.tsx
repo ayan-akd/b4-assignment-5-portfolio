@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { baseUrl } from "@/utils/authOptions";
+import { TExtendedBlog } from "@/app/(dashboardLayout)/dashboard/blogs/page";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -25,48 +26,45 @@ const formSchema = z.object({
     .min(1, "Image URL is required"),
   content: z.string().min(1, "Content is required"),
 });
-type CreateProjectFormProps = {
+type EditBlogFormProps = {
+  initialData: TExtendedBlog;
   onSuccess?: () => void;
 };
-export default function CreateBlogForm({ onSuccess }: CreateProjectFormProps) {
+export default function EditBlogForm({
+  initialData,
+  onSuccess,
+}: EditBlogFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      category: "",
-      image: "",
-      content: "",
-    },
+    defaultValues: initialData,
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-         fetch(`${baseUrl}/api/blogs`, {
-           method: 'POST',
-           headers: {
-             'Content-Type': 'application/json',
-           },
-           body: JSON.stringify(values),
-         })
-         .then((response) => {
-           if (response.ok) {
-             toast.success("Blog created successfully!");
-             form.reset();
-             onSuccess?.();
-           } else {
-             throw new Error('Failed to create blog');
-           }
-         })
-         .catch((error) => {
-           console.error("Form submission error", error);
-           toast.error("Failed to submit the form. Please try again.");
-         });
-       } catch (error) {
-         console.error("Form submission error", error);
-         toast.error("Failed to submit the form. Please try again.");
-       }
+      fetch(`${baseUrl}/api/blogs/${initialData._id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      })
+      .then((response) => {
+        if (response.ok) {
+          toast.success("Blog updated successfully!");
+          onSuccess?.();
+        } else {
+          throw new Error('Failed to update blog');
+        }
+      })
+      .catch((error) => {
+        console.error("Form submission error", error);
+        toast.error("Failed to update the blog. Please try again.");
+      });
+    } catch (error) {
+      console.error("Form submission error", error);
+      toast.error("Failed to update the blog. Please try again.");
+    }
   }
-
   return (
     <Form {...form}>
       <form
@@ -149,7 +147,9 @@ export default function CreateBlogForm({ onSuccess }: CreateProjectFormProps) {
           )}
         />
         <div className="text-end">
-        <Button effect={"shine"} type="submit">Submit</Button>
+          <Button effect={"shine"} type="submit">
+            Update
+          </Button>
         </div>
       </form>
     </Form>

@@ -3,21 +3,31 @@ import { ContentLayout } from "@/components/admin-panel/content-layout";
 import { TMessage } from "@/types/types";
 import { useEffect, useState } from "react";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table";
-  import { Button } from "@/components/ui/button";
-  import { Trash2 } from "lucide-react";
-  import { toast } from "sonner";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Trash2, Eye } from "lucide-react";
+import { toast } from "sonner";
+import ConfirmationBox from "@/components/ConfirmationBox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 type TExtendedMessage = TMessage & {
-    _id: string;
-  };
+  _id: string;
+};
 export default function ManageMessagePage() {
   const [messages, setMessages] = useState<TExtendedMessage[]>([]);
+  const [selectedMessage, setSelectedMessage] = useState<TMessage | null>(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/messages")
@@ -25,7 +35,7 @@ export default function ManageMessagePage() {
       .then((data) => setMessages(data.data))
       .catch((error) => console.error("Error fetching messages:", error));
   }, []);
-  
+
   const handleDelete = async (id: string) => {
     try {
       const response = await fetch(`/api/messages/${id}`, {
@@ -43,12 +53,17 @@ export default function ManageMessagePage() {
       toast.error("Failed to delete message");
     }
   };
+
+  const handleViewMessage = (message: TMessage) => {
+    setSelectedMessage(message);
+    setOpen(true);
+  };
   return (
     <ContentLayout title="Manage Messages">
       <div className="space-y-4">
         <h1 className="text-2xl font-bold">All Messages</h1>
-        <div className="rounded-md border">
-          <Table>
+        <div className="rounded-md border mt-10">
+          <Table className="overflow-auto">
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
@@ -66,19 +81,51 @@ export default function ManageMessagePage() {
                     {message.message}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDelete(message._id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleViewMessage(message)}
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <ConfirmationBox
+                        trigger={
+                          <Button variant="destructive" size="sm">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        }
+                        onConfirm={() => handleDelete(message._id)}
+                        title="Are you sure you want to delete this message?"
+                        description="This action cannot be undone."
+                      />
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </div>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Message from {selectedMessage?.name}</DialogTitle>
+              <DialogDescription></DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <p className="font-semibold">Email:</p>
+                <p>{selectedMessage?.email}</p>
+              </div>
+              <div>
+                <p className="font-semibold">Message:</p>
+                <p className="whitespace-pre-wrap">
+                  {selectedMessage?.message}
+                </p>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </ContentLayout>
   );

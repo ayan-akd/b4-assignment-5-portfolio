@@ -1,18 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
-
 
 import dbConnect from "@/lib/database";
 import { BlogModel } from "@/schemas/blog.schema";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { blogId: string } }
-) {
+export async function GET(req: NextRequest, context: any) {
   try {
     await dbConnect();
 
-    const { blogId } = await params;
+    const { blogId } = await context.params;
 
     if (!blogId) {
       return NextResponse.json({
@@ -42,14 +39,11 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  request: Request,
-  { params }: { params: { blogId: string } }
-) {
+export async function PATCH(req: NextRequest, context: any) {
   try {
     await dbConnect();
-    const { blogId } = params;
-    const data = await request.json();
+    const { blogId } = await context.params;
+    const data = await req.json();
 
     const updatedBlog = await BlogModel.findByIdAndUpdate(blogId, data, {
       new: true,
@@ -73,13 +67,11 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { blogId: string } }
-) {
+// DELETE a blog by ID
+export async function DELETE(req: NextRequest, context: any) {
   try {
     await dbConnect();
-    const { blogId } = await params;
+    const { blogId } = await context.params;
 
     await BlogModel.findByIdAndDelete(blogId);
     return NextResponse.json({
