@@ -19,11 +19,12 @@ import mysql from "@/assets/icons/mysql.png";
 import next from "@/assets/icons/next.svg";
 import lott from "@/assets/lottie.json";
 import Image from "next/image";
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
 
-const Lottie = dynamic(() => import('lottie-react'), {
-  ssr: false // This will disable server-side rendering for Lottie
-});import { motion } from "framer-motion";
+const Lottie = dynamic(() => import("lottie-react"), {
+  ssr: false, // This will disable server-side rendering for Lottie
+});
+import { motion } from "framer-motion";
 const skills = [
   {
     category: "Frontend",
@@ -111,7 +112,9 @@ export default function Skills() {
                   >
                     <Image
                       className={`w-8 ${
-                        skill.name === "Next.js" || skill.name === "GitHub" || skill.name === "Vercel"
+                        skill.name === "Next.js" ||
+                        skill.name === "GitHub" ||
+                        skill.name === "Vercel"
                           ? "dark:invert"
                           : ""
                       }`}

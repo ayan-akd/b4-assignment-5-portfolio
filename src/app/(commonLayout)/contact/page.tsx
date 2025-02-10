@@ -8,10 +8,10 @@ import {
   MdOutlinePhoneInTalk,
   MdOutlineLocationOn,
 } from "react-icons/md";
-import ContactForm from "@/components/contact-components/ContactForm";
+import ContactForm from "@/components/forms/ContactForm";
 export default function ContactPage() {
   return (
-    <div className="">
+    <div>
       <motion.div
         initial={{ opacity: 0, scale: 0, y: -500 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}

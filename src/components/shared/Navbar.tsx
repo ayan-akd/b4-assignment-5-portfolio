@@ -12,6 +12,7 @@ import lightFavIcon from "@/assets/favLight.ico";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 
 const linkList = [
   {
@@ -35,7 +36,15 @@ const linkList = [
     href: "/dashboard",
   },
 ];
-export default function Navbar() {
+
+type UserProps = {
+  user?: {
+    name?: string | null | undefined;
+    email?: string | null | undefined;
+    image?: string | null | undefined;
+  };
+};
+export default function Navbar({ session }: { session: UserProps | null }) {
   const isScrollingDown = useScrollDirection();
   const pathname = usePathname();
   const { resolvedTheme } = useTheme();
@@ -74,7 +83,12 @@ export default function Navbar() {
         </Link>
         <nav className="hidden items-center gap-2 text-sm font-medium md:flex">
           {linkList.map((link) => (
-            <Button key={link.name} variant="link" effect={isActive(link.href) ? "underline" : "hoverUnderline"} className="md:p-1 lg:p-4">
+            <Button
+              key={link.name}
+              variant="link"
+              effect={isActive(link.href) ? "underline" : "hoverUnderline"}
+              className="md:p-1 lg:p-4"
+            >
               <Link
                 href={link.href}
                 className={`${
@@ -89,7 +103,14 @@ export default function Navbar() {
           ))}
         </nav>
         <div className="flex items-center gap-4">
-          <Button effect="shine">Login</Button>
+          {session?.user ? (
+            <Button onClick={()=> signOut()} className="h-8">Logout</Button>
+          ) : (
+            <Link href="/login">
+              <Button effect="shine" className="h-8">Login</Button>
+            </Link>
+          )}
+
           <ToggleButton />
           <Sheet>
             <SheetTrigger asChild>

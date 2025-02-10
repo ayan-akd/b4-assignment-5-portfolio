@@ -1,9 +1,9 @@
 "use client";
-
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,29 +14,35 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { PasswordInput } from "@/components/ui/password-input";
+
+export type TLoginFormValues = {
+  email: string;
+  password: string;
+};
 
 const formSchema = z.object({
-    name: z.string().min(1, "Name is required"),
-    email: z.string().email("Invalid email address"),
-    message: z.string().min(1, "Message is required"),
-  });
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+});
 
-export default function ContactForm() {
+export default function LoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
       email: "",
-      message: "",
-    },
+      password: "",
+    }
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       console.log(values);
-      toast.success("Message sent successfully!");
-      form.reset();
+      toast(
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+        </pre>
+      );
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
@@ -47,28 +53,8 @@ export default function ContactForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-3 w-full mx-auto"
+        className="space-y-4 max-w-3xl mx-auto"
       >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter your name..."
-                  className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-900 text-black dark:text-white"
-                  type="text"
-                  {...field}
-                />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <FormField
           control={form.control}
           name="email"
@@ -78,11 +64,11 @@ export default function ContactForm() {
               <FormControl>
                 <Input
                   placeholder="Enter your email..."
-                  className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-900 text-black dark:text-white"
                   type="email"
                   {...field}
                 />
               </FormControl>
+
               <FormMessage />
             </FormItem>
           )}
@@ -90,24 +76,20 @@ export default function ContactForm() {
 
         <FormField
           control={form.control}
-          name="message"
+          name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Message</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Enter your message..."
-                  className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-900 text-black dark:text-white"
-                  {...field}
-                />
+                <PasswordInput placeholder="Placeholder" {...field} />
               </FormControl>
 
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button effect={"shine"} type="submit" className="h-8 w-full">
-          Submit
+        <Button className="w-full" effect={"shine"} type="submit">
+          Login
         </Button>
       </form>
     </Form>
