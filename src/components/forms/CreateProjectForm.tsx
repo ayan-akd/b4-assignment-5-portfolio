@@ -29,7 +29,7 @@ const formSchema = z.object({
   technology: z.string().min(1, "At least one technology is required"),
   liveLink: z.string().url("Please enter a valid URL").min(1, "Live link is required"),
   clientRepo: z.string().url("Please enter a valid repository URL").min(1, "Client repository link is required"),
-  serverRepo: z.string().url("Please enter a valid repository URL").optional(),
+  serverRepo: z.string().optional(),
   description: z.string().min(1, "Description is required"),
 });
 

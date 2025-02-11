@@ -1,36 +1,301 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Next.js Portfolio & Blog Platform
 
-## Getting Started
+A modern, full-stack portfolio and blogging platform built with Next.js 15, featuring OAuth authentication, dynamic content management, and a powerful dashboard. This application combines a professional portfolio showcase with robust blog management capabilities, all powered by MongoDB and Next.js API routes.
 
-First, run the development server:
+## 🌐 Live Demo & Source Code
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Live Demo:** [View Live Site](https://b4-a5-portfolio.vercel.app)
+- **Source Code:** [GitHub Repository](https://github.com/ayan-akd/b4-assignment-5-portfolio)
+
+## ✨ Core Features
+
+### 🏠 Public Pages
+- **Home Page (/)**
+  - Dynamic portfolio introduction
+  - Skills showcase with icons
+  - Featured projects section
+  - Downloadable resume
+  - Animated section transitions
+  
+- **Projects Page (/projects)**
+  - Grid/list view of projects
+  - Detailed project pages (/projects/[id])
+  - Technology stack display
+  - Live demo & GitHub links
+  
+- **Blog Page (/blog)**
+  - Article listing with pagination
+  - Individual blog posts (/blog/[id])
+  - Markdown content support
+  - Category filtering
+  
+- **Contact Page (/contact)**
+  - Interactive contact form
+  - Real-time form validation
+  - Message storage in MongoDB
+  - Success notifications
+
+### 🔐 Dashboard Features
+- **Authentication**
+  - Social login (Google & GitHub) via NextAuth
+  - Protected routes
+  - Session management
+  - Persistent login state
+
+- **Content Management**
+  - Blog post CRUD operations
+  - Project management interface
+  - Message inbox
+  - Media upload & management
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **Framework**: Next.js 15.1.6
+- **Language**: TypeScript
+- **UI Components**: 
+  - Radix UI primitives
+  - Shadcn UI components
+  - Custom Tailwind components
+- **Styling**: 
+  - Tailwind CSS
+  - CSS Animations
+  - Framer Motion
+- **State Management**: Zustand
+- **Forms**: React Hook Form with Zod validation
+
+### Backend
+- **API Routes**: Next.js API endpoints
+- **Database**: MongoDB with Mongoose
+- **Authentication**: NextAuth.js
+- **Image Processing**: Sharp
+- **Security**: 
+  - API route protection
+  - Input validation
+  - MongoDB sanitization
+
+### Additional Libraries
+- **Content**: React Markdown
+- **UI Enhancement**:
+  - Embla Carousel
+  - Lottie Animations
+  - Sonner notifications
+  - Lucide React icons
+  - Tabler icons
+- **Theming**: Next-themes for dark mode
+- **Development**: ESLint, TypeScript
+
+## 📁 Project Structure
+```
+app/
+├── (commonLayout)/           # Public pages layout group
+│   ├── blog/                # Blog pages
+│   ├── contact/             # Contact page
+│   ├── login/              # Login page
+│   ├── projects/           # Projects pages
+│   ├── layout.tsx
+│   └── page.tsx
+├── (dashboardLayout)/       # Dashboard layout group
+│   ├── dashboard/
+│   │   ├── blogs/          # Blog management
+│   │   ├── messages/       # Message management
+│   │   ├── projects/       # Project management
+│   │   ├── page.tsx
+│   │   └── layout.tsx
+├── api/                     # API routes
+│   ├── auth/               # Auth endpoints
+│   ├── blogs/              # Blog endpoints
+│   ├── messages/           # Message endpoints
+│   ├── projects/           # Project endpoints
+│   ├── error.tsx
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── not-found.tsx
+├── assets/                  # Static assets
+├── components/             # Reusable components
+├── hooks/                  # Custom hooks
+├── lib/                    # Utility functions
+├── providers/              # Context providers
+├── schemas/                # Validation schemas
+├── types/                  # TypeScript types
+│   └── types.ts
+├── utils/                  # Helper functions
+└── middleware.ts           # Next.js middleware
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
+- Node.js 18.x or higher
+- MongoDB database
+- GitHub and Google OAuth credentials
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Installation
 
-## Learn More
+1. Clone the repository:
+```bash
+git clone https://github.com/ayan-akd/b4-assignment-5-portfolio.git
+cd b4-assignment-5-portfolio
+```
 
-To learn more about Next.js, take a look at the following resources:
+2. Install dependencies:
+```bash
+npm install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Configure environment variables:
+```env
+# App URLs
+NEXTAUTH_URL=http://localhost:3000
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Authentication
+NEXTAUTH_SECRET=your-secret-key
+GITHUB_ID=your-github-client-id
+GITHUB_SECRET=your-github-client-secret
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
 
-## Deploy on Vercel
+# Database
+MONGODB_URI=your-mongodb-connection-string
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Run the development server:
+```bash
+npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 💾 Data Models
+
+### Blog Post
+```typescript
+interface BlogPost {
+  title: string;
+  content: string;
+  image: string;
+  category: string;
+}
+```
+
+### Project
+```typescript
+interface Project {
+  title: string;
+  description: string;
+  images: string[];
+  liveLink: string;
+  clientRepo: string;
+  serverRepo: string;
+  technologies: string[];
+}
+```
+
+### Message
+```typescript
+interface Message {
+  name: string;
+  email: string;
+  message: string;
+}
+```
+
+## 🔒 API Routes
+
+### Authentication
+- `GET/POST /api/auth/[...nextauth]` - NextAuth authentication routes
+
+### Blog Endpoints
+- `GET /api/blogs` - Get all blogs
+- `GET /api/blogs/[id]` - Get single blog
+- `POST /api/blogs` - Create blog (protected)
+- `PUT /api/blogs/[id]` - Update blog (protected)
+- `DELETE /api/blogs/[id]` - Delete blog (protected)
+
+### Project Endpoints
+- `GET /api/projects` - Get all projects
+- `GET /api/projects/[id]` - Get single project
+- `POST /api/projects` - Create project (protected)
+- `PUT /api/projects/[id]` - Update project (protected)
+- `DELETE /api/projects/[id]` - Delete project (protected)
+
+### Message Endpoints
+- `POST /api/messages` - Create message
+- `GET /api/messages` - Get all messages (protected)
+- `DELETE /api/messages/[id]` - Delete message (protected)
+
+## 🎨 Features Implemented
+- [x] Server-side rendering (SSR) for SEO
+- [x] Static Site Generation for stable content
+- [x] Dark mode support
+- [x] Markdown blog content
+- [x] Social authentication
+- [x] Responsive design
+- [x] API routes
+- [x] Form validation
+- [x] Image optimization
+- [x] Animation effects
+- [x] Protected dashboard routes
+- [x] MongoDB integration
+- [x] Contact form functionality
+- [x] Project showcase
+- [x] Blog management system
+
+## 📦 Package Scripts
+```json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  }
+}
+```
+
+## 🚀 Deployment
+
+The application is configured for deployment on Vercel:
+
+1. Push your code to GitHub
+2. Connect your GitHub repository to Vercel
+3. Configure environment variables in Vercel dashboard
+4. Deploy
+
+## 🔍 Future Enhancements
+- [ ] Newsletter integration
+- [ ] Comment system for blog posts
+- [ ] Advanced image gallery for projects
+- [ ] Analytics dashboard
+- [ ] Rich text editor alternative to Markdown
+- [ ] Social media sharing
+- [ ] RSS feed
+- [ ] Search functionality
+- [ ] Performance optimization
+- [ ] Automated testing
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/AmazingFeature`
+3. Commit your changes: `git commit -m 'Add AmazingFeature'`
+4. Push to the branch: `git push origin feature/AmazingFeature`
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Next.js team for the amazing framework
+- Vercel for hosting
+- MongoDB for database
+- All open-source contributors
+
+For more information about the technologies used, please refer to their respective documentation:
+- [Next.js](https://nextjs.org/)
+- [MongoDB](https://www.mongodb.com/)
+- [NextAuth.js](https://next-auth.js.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Framer Motion](https://www.framer.com/motion/)

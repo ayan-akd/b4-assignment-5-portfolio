@@ -10,6 +10,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+export const metadata = {
+  title: "Portfolio | Dashboard",
+  description: "Dashboard",
+};
 async function getDashboardData() {
   const projects = await fetch(`${baseUrl}/api/projects`).then((res) =>
     res.json()
